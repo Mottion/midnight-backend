@@ -1,0 +1,16 @@
+version: '3.1'
+
+services:
+  postgres:
+    image: postgres
+    container_name: midnight
+    environment:
+      POSTGRES_PASSWORD: midnight123
+      POSTGRES_DB: midnight
+    volumes:
+      - midnight:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  midnight: 
