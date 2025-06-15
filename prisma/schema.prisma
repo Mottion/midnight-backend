@@ -14,13 +14,59 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
-  id               String         @id @default(uuid())
-  name             String
-  email            String         @unique
-  password         String
+  id       String @id @default(uuid())
+  name     String
+  email    String @unique
+  password String
+
+  payments Payment[] @relation("UserPayment")
 
   @@index([id], name: "IDX_USER_ID", type: Hash)
   @@index([email], name: "IDX_USER_EMAIL", type: Hash)
+}
+
+model Payment {
+  id            String          @id @default(uuid())
+  ownerId       String
+  description   String
+  value         Float
+  paymentDate   DateTime
+  scheduledDate DateTime
+  typeId        String
+  recurring     Boolean
+  observation   String?
+  category      PaymentCategory
+  status        PaymentStatus
+  paymentMethod PaymentMethod
+
+  type  PaymentType @relation("PaymentType", references: [id], fields: [typeId])
+  owner User        @relation("UserPayment", references: [id], fields: [ownerId])
+}
+
+enum PaymentMethod {
+  CASH
+  CREDIT_CARD
+  DEBIT_CARD
+  PIX
+  BANK_TRANSFER
+}
+
+enum PaymentCategory {
+  INFLOW
+  OUTFLOW
+}
+
+enum PaymentStatus {
+  PENDING
+  OVERDUE
+  COMPLETED
+}
+
+model PaymentType {
+  id          String @id @default(uuid())
+  description String
+  classes     String
+
+  finalcialRecord Payment[] @relation("PaymentType")
 }

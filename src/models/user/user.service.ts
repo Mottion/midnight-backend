@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserRepository } from './user.repository';
-import { createUserDto } from './dto/create-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { AccessTokenDto } from 'src/providers/auth/dto/access-token.dto';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class UserService {
     private readonly jwtService: JwtService,
   ){}
 
-  async create(user: createUserDto){
+  async create(user: CreateUserDto){
     const response = await this.userRepository.create(user);
     const payload = { id: response.id, name: response.name };
     return new AccessTokenDto(await this.jwtService.signAsync(payload));

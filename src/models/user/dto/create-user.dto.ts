@@ -3,7 +3,7 @@ import * as Joi from 'joi';
 import { Prisma } from "generated/prisma";
 
 @JoiSchemaOptions({allowUnknown: false})
-export class createUserDto implements Prisma.UserCreateInput {
+export class CreateUserDto implements Prisma.UserCreateInput {
   @JoiSchema(Joi.string().required())
   name: string;
   @JoiSchema(Joi.string().required())
